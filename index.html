@@ -1,4 +1,4 @@
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Skywell Test Letsee</title>
@@ -10,25 +10,25 @@
 <script>
 letsee.ready(() => {
     letsee.start();
-    letsee.addTHREE(THREE).then(obj => { // 1. Three라이브러리를 param으로 삽입하고 결과로 3D를 그릴때 사용되는 renderer, camera, scene, update를 얻어옵니다.
+    letsee.addTHREE(THREE).then(obj => {
         console.log(obj)
-        renderer = obj.renderer; // WebGLRenderer
-        scene = obj.scene; // Three.js Scene (Object3D)
-        update = obj.update; // SDK 다음 Frame을 그리도록 호출하는 함수
+        renderer = obj.renderer;
+        scene = obj.scene;
+        update = obj.update;
         letsee.addTarget('https://developer.letsee.io/api-tm/target-manager/target-uid/61288210f8e80a05ba9010e0').then(entity => {
-            toystory = entity; // 2. 마커에 대한 Entity 객체를 얻어옵니다.
+            toystory = entity;
             const geometry = new THREE.BoxGeometry();
             const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
             const cube = new THREE.Mesh( geometry, material );
             cube.scale.set(50, 50, 50);
-            toystory.add(cube); // Entity에 cube mesh 삽입
-            scene.add(toystory); // 3. mesh Object들을 담은 Entity 객체를 Three.js Scene에 추가합니다.
+            toystory.add(cube);
+            scene.add(toystory);
 
             const animate = async function() {
                 requestAnimationFrame(animate);
-                await update(); // 4. Letsee SDK에서 다음 Frame을 호출합니다.
-                const camera = letsee.threeRenderer().getDeviceCamera(); // 5. Three.Camera를 가져옵니다.
-                renderer.render(scene, camera); // 6. WebGLRenderer를 통해 scene을 렌더링합니다.
+                await update();
+                const camera = letsee.threeRenderer().getDeviceCamera();
+                renderer.render(scene, camera);
             };
             animate();
         });
