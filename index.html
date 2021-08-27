@@ -9,106 +9,32 @@
 </head>
 <body>
 <script>
-	 let scene,
-        camera,
-        renderer,
-        ambientLight,
-        directionalLight,
-        mesh,
-        animations,
-        mixer,
-        entity,
-        clock = new THREE.Clock();
-    let loader = new THREE.GLTFLoader();
+letsee.ready(() => {
+    letsee.start();
+    letsee.addTHREE(THREE).then(obj => { // 1. Three라이브러리를 param으로 삽입하고 결과로 3D를 그릴때 사용되는 renderer, camera, scene, update를 얻어옵니다.
+        console.log(obj)
+        renderer = obj.renderer; // WebGLRenderer
+        scene = obj.scene; // Three.js Scene (Object3D)
+        update = obj.update; // SDK 다음 Frame을 그리도록 호출하는 함수
+        letsee.addTarget('https://developer.letsee.io/api-tm/target-manager/target-uid/6128c7b7f8e80a05ba9010e1').then(entity => {
+            toystory = entity; // 2. 마커에 대한 Entity 객체를 얻어옵니다.
+            const geometry = new THREE.BoxGeometry();
+            const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            const cube = new THREE.Mesh( geometry, material );
+            cube.scale.set(50, 50, 50);
+            toystory.add(cube); // Entity에 cube mesh 삽입
+            scene.add(toystory); // 3. mesh Object들을 담은 Entity 객체를 Three.js Scene에 추가합니다.
 
-    letsee.ready(() => {
-        letsee.start();
-
-        // Activate THREE.js library
-        letsee.addTHREE(THREE).then(obj => {
-            create3DWorld(obj);
-        });
-    });
-    letsee.init();
-
-    const onProgress = (xhr) => {
-        if (xhr.lengthComputable) {
-            const percentComplete = xhr.loaded / xhr.total * 100;
-            console.warn(Math.round(percentComplete) + '%');
-        }
-    };
-
-    const onError = (e) => {
-        console.error(e);
-    };
-
-    const create3DWorld = (obj) => {
-        renderer = obj.renderer;
-        scene = obj.scene;
-
-        ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-        ambientLight.position.set(0, 0, 0);
-        scene.add(ambientLight);
-
-        directionalLight = new THREE.DirectionalLight(0xffffff);
-        directionalLight.position.set(0, -95, 120);
-        scene.add(directionalLight);
-
-        letsee.addTarget('https://developer.letsee.io/api-tm/target-manager/target-uid/6126458b2f7b8005cc146f03').then(_entity => {
-            entity = _entity;
-            loadModel('assets/Barni.glb')
-                .then(model => {
-                    mesh = model;
-
-                    // 2.Add mesh into entity
-                    entity.add(mesh);
-
-                    // 3. Add entity to scene
-                    scene.add(entity);
-
-                });
-
-            // Render all
             const animate = async function() {
                 requestAnimationFrame(animate);
-
-                if (mixer) {
-                    let delta = clock.getDelta();
-                    mixer.update(delta);
-                }
-
-                camera = letsee.threeRenderer().getDeviceCamera();
-                await letsee.threeRenderer().update();
-
-                renderer.render(scene, camera);
+                await update(); // 4. Letsee SDK에서 다음 Frame을 호출합니다.
+                const camera = letsee.threeRenderer().getDeviceCamera(); // 5. Three.Camera를 가져옵니다.
+                renderer.render(scene, camera); // 6. WebGLRenderer를 통해 scene을 렌더링합니다.
             };
-
             animate();
         });
-    }
-
-    const loadModel = (path) => {
-        return new Promise((resolve) => {
-            loader.load(path, function (gltf) {
-
-                mesh = gltf.scene;
-                animations = gltf.animations;
-
-                mesh.position.y = -50;
-                mesh.scale.setScalar(30);
-
-                // Play model's animation
-                if (animations.length) {
-                    mixer = new THREE.AnimationMixer(mesh);
-                    let action = mixer.clipAction(animations[0]);
-                    action.play();
-                } else console.warn(`Model does not have animation`);
-
-                resolve(mesh);
-
-            }, onProgress, onError);
-        });
-    }
+    });
+});
 </script>
 </body>
 </html>
