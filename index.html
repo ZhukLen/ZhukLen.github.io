@@ -6,6 +6,15 @@
 		<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
 </head>
 <body>
+<script>
+	import {cubeEnvMapComponent} from './cubemap-static.js'
+	AFRAME.registerComponent('cubemap-static', cubeEnvMapComponent)
+	import {cubeMapRealtimeComponent} from './cubemap-realtime.js'
+	AFRAME.registerComponent('cubemap-realtime', cubeMapRealtimeComponent)
+	import {xrLightComponent, xrLightSystem} from './xrlight.js'
+	AFRAME.registerComponent('xr-light', xrLightComponent)
+	AFRAME.registerSystem('xr-light', xrLightSystem)
+</script>
 <a-scene
   renderer="colorManagement: true"
   xrweb>
@@ -19,11 +28,6 @@
     <img id="negy" src="./assets/cubemap-static/negy.jpg">
     <img id="negz" src="./assets/cubemap-static/negz.jpg">
   </a-assets>
-
-  <a-camera
-    id="camera"
-    position="0 8 8">
-  </a-camera>
   
   <a-entity
     xr-light
@@ -73,14 +77,7 @@
   ></a-plane>
 </a-scene>
 <script>
-	import {cubeEnvMapComponent} from './cubemap-static.js'
-	AFRAME.registerComponent('cubemap-static', cubeEnvMapComponent)
-	import {cubeMapRealtimeComponent} from './cubemap-realtime.js'
-	AFRAME.registerComponent('cubemap-realtime', cubeMapRealtimeComponent)
-	import {xrLightComponent, xrLightSystem} from './xrlight.js'
-	AFRAME.registerComponent('xr-light', xrLightComponent)
-	AFRAME.registerSystem('xr-light', xrLightSystem)
-    letsee.ready(() => {
+	letsee.ready(() => {
       letsee.start();
       letsee.addTarget('https://developer.letsee.io/api-tm/target-manager/target-uid/6126458b2f7b8005cc146f03')
         .then(entity => {
