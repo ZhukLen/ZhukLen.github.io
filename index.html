@@ -2,95 +2,113 @@
 <head>
     <meta charset="UTF-8">
     <title>Skywell Test Letsee</title>
-		<script src="https://developer.letsee.io/api/webar?key=171a5e81605e4ab029c0e52919634998c80ff7998a61c05c8244cfdbd50d578c"></script>
-		<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<script src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.123.0/examples/js/loaders/GLTFLoader.js"></script>
+	<script src="https://developer.letsee.io/api/webar?key=171a5e81605e4ab029c0e52919634998c80ff7998a61c05c8244cfdbd50d578c"></script>	
 </head>
 <body>
 <script>
-	import {cubeEnvMapComponent} from './cubemap-static.js'
-	AFRAME.registerComponent('cubemap-static', cubeEnvMapComponent)
-	import {cubeMapRealtimeComponent} from './cubemap-realtime.js'
-	AFRAME.registerComponent('cubemap-realtime', cubeMapRealtimeComponent)
-	import {xrLightComponent, xrLightSystem} from './xrlight.js'
-	AFRAME.registerComponent('xr-light', xrLightComponent)
-	AFRAME.registerSystem('xr-light', xrLightSystem)
-</script>
-<a-scene
-  renderer="colorManagement: true"
-  xrweb>
+	 let scene,
+        camera,
+        renderer,
+        ambientLight,
+        directionalLight,
+        mesh,
+        animations,
+        mixer,
+        entity,
+        clock = new THREE.Clock();
+    let loader = new THREE.GLTFLoader();
 
-  <a-assets>
-    <a-asset-item id="ballModel" src="./assets/jini-ball.glb"></a-asset-item>
-    <img id="posx" src="./assets/cubemap-static/posx.jpg">
-    <img id="posy" src="./assets/cubemap-static/posy.jpg">
-    <img id="posz" src="./assets/cubemap-static/posz.jpg">
-    <img id="negx" src="./assets/cubemap-static/negx.jpg">
-    <img id="negy" src="./assets/cubemap-static/negy.jpg">
-    <img id="negz" src="./assets/cubemap-static/negz.jpg">
-  </a-assets>
-  
-  <a-camera
-    id="camera"
-    position="0 8 8">
-  </a-camera>
-  
-  <a-entity
-    xr-light
-    light="type: directional;
-       castShadow: true;
-       shadowMapHeight:2048;
-       shadowMapWidth:2048;
-       shadowCameraTop: 10;
-       target: #group;"
-    xrextras-attach="target: group; offset: 0 15 0;"
-    shadow>
-  </a-entity>
-  
-  <a-light
-    xr-light
-    type="ambient">
-  </a-light>
+    letsee.ready(() => {
+        letsee.start();
 
-  <a-entity 
-    id="group">
-      
-    <a-entity
-      gltf-model="#ballModel"
-      cubemap-static
-      position="-2 0 0"
-      scale="10 10 10"
-      shadow>
-    </a-entity>
-  
-    <a-entity
-      gltf-model="#ballModel"
-      cubemap-realtime
-      position="2 0 0"
-      scale="10 10 10"
-      shadow>
-    </a-entity>
-    
-  </a-entity>
-  
-  <a-plane
-    id="ground"
-    rotation="-90 0 0"
-    width="100"
-    height="100"
-    material="shader: shadow"
-    shadow
-  ></a-plane>
-</a-scene>
-<script>
-	letsee.ready(() => {
-      letsee.start();
-      letsee.addTarget('https://developer.letsee.io/api-tm/target-manager/target-uid/6126458b2f7b8005cc146f03')
-        .then(entity => {
-            let xrElement = letsee.createXRElement(document.getElementById('group'));
-            letsee.bindXRElement(xrElement, entity);
+        // Activate THREE.js library
+        letsee.addTHREE(THREE).then(obj => {
+            create3DWorld(obj);
         });
     });
-    letsee.init({trackerType: 'image'});
+    letsee.init();
+
+    const onProgress = (xhr) => {
+        if (xhr.lengthComputable) {
+            const percentComplete = xhr.loaded / xhr.total * 100;
+            console.warn(Math.round(percentComplete) + '%');
+        }
+    };
+
+    const onError = (e) => {
+        console.error(e);
+    };
+
+    const create3DWorld = (obj) => {
+        renderer = obj.renderer;
+        scene = obj.scene;
+
+        ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        ambientLight.position.set(0, 0, 0);
+        scene.add(ambientLight);
+
+        directionalLight = new THREE.DirectionalLight(0xffffff);
+        directionalLight.position.set(0, -95, 120);
+        scene.add(directionalLight);
+
+        letsee.addTarget('https://developer.letsee.io/api-tm/target-manager/target-uid/6126458b2f7b8005cc146f03').then(_entity => {
+            entity = _entity;
+            loadModel('.assets/barni.glb')
+                .then(model => {
+                    mesh = model;
+
+                    // 2.Add mesh into entity
+                    entity.add(mesh);
+
+                    // 3. Add entity to scene
+                    scene.add(entity);
+
+                });
+
+            // Render all
+            const animate = async function() {
+                requestAnimationFrame(animate);
+
+                if (mixer) {
+                    let delta = clock.getDelta();
+                    mixer.update(delta);
+                }
+
+                camera = letsee.threeRenderer().getDeviceCamera();
+                await letsee.threeRenderer().update();
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+        });
+    }
+
+    const loadModel = (path) => {
+        return new Promise((resolve) => {
+            loader.load(path, function (gltf) {
+
+                mesh = gltf.scene;
+                animations = gltf.animations;
+
+                mesh.position.y = -50;
+                mesh.scale.setScalar(30);
+
+                // Play model's animation
+                if (animations.length) {
+                    mixer = new THREE.AnimationMixer(mesh);
+                    let action = mixer.clipAction(animations[1]);
+                    action.play();
+                } else console.warn(`Model does not have animation`);
+
+                resolve(mesh);
+
+            }, onProgress, onError);
+        });
+    }
 </script>
 </body>
 </html>
