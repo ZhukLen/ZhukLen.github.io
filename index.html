@@ -1,20 +1,90 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Simple Example</title>
+    <title>Skywell Test Letsee</title>
 		<script src="https://developer.letsee.io/api/webar?key=171a5e81605e4ab029c0e52919634998c80ff7998a61c05c8244cfdbd50d578c"></script>
+		<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
 </head>
 <body>
-<div id="container">
-    Hello, world!
-</div>
+<a-scene
+  renderer="colorManagement: true"
+  xrweb>
+
+  <a-assets>
+    <a-asset-item id="ballModel" src="./assets/jini-ball.glb"></a-asset-item>
+    <img id="posx" src="./assets/cubemap-static/posx.jpg">
+    <img id="posy" src="./assets/cubemap-static/posy.jpg">
+    <img id="posz" src="./assets/cubemap-static/posz.jpg">
+    <img id="negx" src="./assets/cubemap-static/negx.jpg">
+    <img id="negy" src="./assets/cubemap-static/negy.jpg">
+    <img id="negz" src="./assets/cubemap-static/negz.jpg">
+  </a-assets>
+
+  <a-camera
+    id="camera"
+    position="0 8 8">
+  </a-camera>
+  
+  <a-entity
+    xr-light
+    light="type: directional;
+       castShadow: true;
+       shadowMapHeight:2048;
+       shadowMapWidth:2048;
+       shadowCameraTop: 10;
+       target: #group;"
+    xrextras-attach="target: group; offset: 0 15 0;"
+    shadow>
+  </a-entity>
+  
+  <a-light
+    xr-light
+    type="ambient">
+  </a-light>
+
+  <a-entity 
+    id="group">
+      
+    <a-entity
+      gltf-model="#ballModel"
+      cubemap-static
+      position="-2 0 0"
+      scale="10 10 10"
+      shadow>
+    </a-entity>
+  
+    <a-entity
+      gltf-model="#ballModel"
+      cubemap-realtime
+      position="2 0 0"
+      scale="10 10 10"
+      shadow>
+    </a-entity>
+    
+  </a-entity>
+  
+  <a-plane
+    id="ground"
+    rotation="-90 0 0"
+    width="100"
+    height="100"
+    material="shader: shadow"
+    shadow
+  ></a-plane>
+</a-scene>
 <script>
+	import {cubeEnvMapComponent} from './cubemap-static.js'
+	AFRAME.registerComponent('cubemap-static', cubeEnvMapComponent)
+	import {cubeMapRealtimeComponent} from './cubemap-realtime.js'
+	AFRAME.registerComponent('cubemap-realtime', cubeMapRealtimeComponent)
+	import {xrLightComponent, xrLightSystem} from './xrlight.js'
+	AFRAME.registerComponent('xr-light', xrLightComponent)
+	AFRAME.registerSystem('xr-light', xrLightSystem)
     letsee.ready(() => {
       letsee.start();
       letsee.addTarget('https://developer.letsee.io/api-tm/target-manager/target-uid/6126458b2f7b8005cc146f03')
         .then(entity => {
-            let xrElement = letsee.createXRElement(document.getElementById('container'));
+            let xrElement = letsee.createXRElement(document.getElementById('group'));
             letsee.bindXRElement(xrElement, entity);
         });
     });
