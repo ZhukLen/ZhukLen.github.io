@@ -9,27 +9,26 @@
 </head>
 <body>
 <script>
-	 let scene,
-        camera,
-        renderer,
-        ambientLight,
-        directionalLight,
-        mesh,
-        animations,
-        mixer,
-        entity,
-        clock = new THREE.Clock();
+	let scene;
+    let camera;
+    let renderer;
+    let ambientLight;
+    let directionalLight;
+    let mesh;
+    let animations;
+    let mixer;
+    let entity;
+    let clock = new THREE.Clock();
     let loader = new THREE.GLTFLoader();
 
     letsee.ready(() => {
         letsee.start();
-
         // Activate THREE.js library
         letsee.addTHREE(THREE).then(obj => {
             create3DWorld(obj);
         });
     });
-    letsee.init();
+    letsee.init({trackerType: 'image'});
 
     const onProgress = (xhr) => {
         if (xhr.lengthComputable) {
@@ -41,6 +40,29 @@
     const onError = (e) => {
         console.error(e);
     };
+	
+	const loadModel = (path) => {
+        return new Promise((resolve) => {
+            loader.load(path, function (gltf) {
+
+                mesh = gltf.scene;
+                animations = gltf.animations;
+
+                mesh.position.z = 30;
+                mesh.scale.setScalar(30);
+
+                // Play model's animation
+                if (animations.length) {
+                    mixer = new THREE.AnimationMixer(mesh);
+                    let action = mixer.clipAction(animations[0]);
+                    action.play();
+                } else console.warn(`Model does not have animation`);
+
+                resolve(mesh);
+
+            }, onProgress, onError);
+        });
+    }
 
     const create3DWorld = (obj) => {
         renderer = obj.renderer;
@@ -56,10 +78,9 @@
 
         letsee.addTarget('https://developer.letsee.io/api-tm/target-manager/target-uid/6126458b2f7b8005cc146f03').then(_entity => {
             entity = _entity;
-            loadModel('.assets/barni.glb')
+            loadModel('assets/Barni.glb')
                 .then(model => {
                     mesh = model;
-
                     // 2.Add mesh into entity
                     entity.add(mesh);
 
@@ -78,35 +99,11 @@
                 }
 
                 camera = letsee.threeRenderer().getDeviceCamera();
-                await letsee.threeRenderer().update();
-
-                renderer.render(scene, camera);
+				renderer.render(scene, camera);
+				
+                await letsee.threeRenderer().update();              
             };
-
             animate();
-        });
-    }
-
-    const loadModel = (path) => {
-        return new Promise((resolve) => {
-            loader.load(path, function (gltf) {
-
-                mesh = gltf.scene;
-                animations = gltf.animations;
-
-                mesh.position.y = -50;
-                mesh.scale.setScalar(30);
-
-                // Play model's animation
-                if (animations.length) {
-                    mixer = new THREE.AnimationMixer(mesh);
-                    let action = mixer.clipAction(animations[1]);
-                    action.play();
-                } else console.warn(`Model does not have animation`);
-
-                resolve(mesh);
-
-            }, onProgress, onError);
         });
     }
 </script>
