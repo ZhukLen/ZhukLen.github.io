@@ -88,9 +88,10 @@
     
 		// mesh
 		mesh = new THREE.Mesh( geometry, material1 );
-		mesh.position.set( 0 , 1, 6 );
-		scene.add( mesh );
-		camera = letsee.threeRenderer().getDeviceCamera();
+		mesh.position.set( 0 , 0, 4 );
+	    camera = letsee.threeRenderer().getDeviceCamera();
+		camera.add( mesh );
+		// camera = letsee.threeRenderer().getDeviceCamera();
 		
 		// Render all
         const animate = async function() {
