@@ -90,7 +90,9 @@
 		mesh = new THREE.Mesh( geometry, material1 );
 		mesh.position.set( 0 , 0, -4 );
 	    camera = letsee.threeRenderer().getDeviceCamera();
-		camera.add( mesh );
+		scene.add( mesh );
+	    camera.position.set( 0 , 0, 0 );
+	    camera.lookAt( mesh.position );
 		// camera = letsee.threeRenderer().getDeviceCamera();
 		
 		// Render all
