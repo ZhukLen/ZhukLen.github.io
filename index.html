@@ -96,7 +96,7 @@
 
 	    letsee.onOrientationChange(e => {
     const {alpha, beta, gamma} = e;
-		    camera.rotation.set(camera.rotation.z+alpha, camera.rotation.x+beta, camera.rotation.y+gamma);
+		    camera.rotation.set(alpha, beta, gamma);
 });
 		
 		// Render all
