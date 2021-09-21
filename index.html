@@ -94,7 +94,7 @@
 	    camera.position.set( 0 , 2, 0 );
 	    camera.lookAt( mesh.position );
 
-	    letsee.onRotationRateChange(e => {
+	    letsee.onOrientationChange(e => {
     const {alpha, beta, gamma} = e;
 		    camera.rotation.set(camera.rotation.z+alpha, camera.rotation.x+beta, camera.rotation.y+gamma);
 });
