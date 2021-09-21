@@ -91,14 +91,18 @@
 		mesh.position.set( 0 , 0, -4 );
 	    camera = letsee.threeRenderer().getDeviceCamera();
 		scene.add( mesh );
-	    camera.position.set( 0 , 0, 0 );
+	    camera.position.set( 0 , 2, 0 );
 	    camera.lookAt( mesh.position );
-		// camera = letsee.threeRenderer().getDeviceCamera();
+
+	    letsee.onRotationRateChange(e => {
+    const {alpha, beta, gamma} = e;
+		    camera.rotation.set(camera.rotation.z+alpha, camera.rotation.x+beta, camera.rotation.y+gamma);
+});
 		
 		// Render all
         const animate = async function() {
             requestAnimationFrame(animate);
-			renderer.render(scene, camera);		
+	    renderer.render(scene, camera);		
             await letsee.threeRenderer().update();              
         };
         animate();
