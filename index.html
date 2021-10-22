@@ -128,8 +128,8 @@
             var x = event.accelerationIncludingGravity.x;
             var y = event.accelerationIncludingGravity.y;
             var z = event.accelerationIncludingGravity.z;
-            modelViewerTransform.orientation = ` 0 ${Math.min(Math.max(x, -maxDeg), maxDeg)}deg ${Math.min(Math.max(y, -maxDeg), maxDeg)}deg`; 
-          }, true);
+            modelViewerTransform.orientation = ` 0 ${x}deg ${y}deg`; 
+          });
       </script> 
     </div>
   </div>
