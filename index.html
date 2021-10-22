@@ -126,9 +126,10 @@
         });
         if (window.DeviceMotionEvent) {
           window.addEventListener("devicemotion", (event) => {
+            let k = maxDeg * 0.102;
             var x = event.accelerationIncludingGravity.x;
             var y = event.accelerationIncludingGravity.y;
-            modelViewerTransform.orientation = `0 ${2 * y}deg ${2 * x}deg`; 
+            modelViewerTransform.orientation = `0 ${k * y}deg ${k * -x}deg`; 
           }, true);
         }
       </script> 
