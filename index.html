@@ -124,17 +124,12 @@
           let relativeCenterY = event.clientY - (window.innerHeight * 0.5); 
           modelViewerTransform.orientation = ` 0 ${maxDeg * relativeCenterY / window.innerHeight}deg ${maxDeg * relativeCenterX / window.innerWidth}deg`; 
         });
-        if (window.DeviceOrientationEvent) {
-          window.addEventListener("deviceorientation", function(event) {
-            // alpha: rotation around z-axis
-            let rotateDegrees = event.alpha;
-            // gamma: left to right
-            let leftToRight = event.gamma;
-            // beta: front back motion
-            let frontToBack = event.beta;
-            modelViewerTransform.orientation = ` 0 0 ${Math.min(Math.max(leftToRight, -maxDeg), maxDeg)}deg`; 
+          window.addEventListener("devicemotion", function(event) {
+            var x = event.accelerationIncludingGravity.x;
+            var y = event.accelerationIncludingGravity.y;
+            var z = event.accelerationIncludingGravity.z;
+            modelViewerTransform.orientation = ` 0 ${Math.min(Math.max(x, -maxDeg), maxDeg)}deg ${Math.min(Math.max(y, -maxDeg), maxDeg)}deg`; 
           }, true);
-        }
       </script> 
     </div>
   </div>
