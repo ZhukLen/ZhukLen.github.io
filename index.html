@@ -132,7 +132,7 @@
             let leftToRight = event.gamma;
             // beta: front back motion
             let frontToBack = event.beta;
-            modelViewerTransform.orientation = ` 0 0 ${maxDeg * leftToRight}deg`; 
+            modelViewerTransform.orientation = ` 0 0 ${Math.min(Math.max(leftToRight, -maxDeg), maxDeg)}deg`; 
           }, true);
         }
       </script> 
