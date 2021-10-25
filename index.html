@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<meta name="author" content="">
+  <head>
+    <title>&lt;model-viewer&gt; template</title>
+    <meta charset="utf-8">
+    <meta name="description" content="&lt;model-viewer&gt; template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="./js/styles3d.css" rel="stylesheet"/>
 <!-- OPTIONAL: The :focus-visible polyfill removes the focus ring for some input types -->
 <script src="./js/focus-visible.js" defer></script>
@@ -15,7 +15,7 @@
 
       <!--Model-Viewer-->
     <div style="width: 670px; height: 420px;">
-      <model-viewer id="ar-skywell" alt="augmented reality" src="models/Trex_v06.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls environment-image="neutral" seamless-poster poster=" trex-poster.webp" shadow-intensity="1" autoplay min-camera-orbit="-35deg 90deg auto" max-camera-orbit="35deg 90deg auto" disable-zoom style="width: 100%; height: 100%;"> 
+      <model-viewer id="ar-skywell" alt="augmented reality" src="models/Trex_v06.glb" ar ar-modes="webxr quick-look" camera-controls environment-image="neutral" seamless-poster poster=" trex-poster.webp" shadow-intensity="1" autoplay min-camera-orbit="-35deg 90deg auto" max-camera-orbit="35deg 90deg auto" disable-zoom style="width: 100%; height: 100%;"> 
 
         <div class="progress-bar hide" slot="progress-bar"> 
             <div class="update-bar"></div> 
@@ -28,11 +28,11 @@
     <script> 
       const ar = document.querySelector("#ar-skywell");
       ar.addEventListener('ar-status', (e) => {
-        if(e.detail.status == 'not-presenting')
+        if(e.detail.status == 'not-presenting' || e.detail.status == 'failed')
         {
-          ar.setAttribute("src", "/models/logo_dance_5.glb");
-        } else {
           ar.setAttribute("src", "models/Trex_v06.glb");
+        } else {
+          ar.setAttribute("src", "/models/logo_dance_5.glb");
         }
       });
     </script>
