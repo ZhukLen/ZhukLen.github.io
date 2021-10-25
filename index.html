@@ -27,17 +27,14 @@
 
     <script> 
       const ar = document.querySelector("#ar-skywell");
-    /*
       ar.addEventListener('ar-status', (e) => {
         if(e.detail.status == 'not-presenting')
         {
           ar.setAttribute("src", "/models/logo_dance_5.glb");
+        } else {
+          ar.setAttribute("src", "models/Trex_v06.glb");
         }
-        e.setAttribute("src", "/models/Hyundai_Basic_Khaki_black_v03.glb");
       });
-    */
-    const arButton = document.querySelector("#ar-button");
-    arButton.addEventListener('click', () => { ar.setAttribute("src", "/models/logo_dance_5.glb"); }, false);
     </script>
 
   <script src="./js/script.js"></script>
