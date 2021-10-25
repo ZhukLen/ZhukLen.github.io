@@ -19,14 +19,19 @@
       </model-viewer>
     </div>
     <p id="buttonclick" style="font-size: 32px; color: red; display: block;">ButtonClicked</p>
+    <p id="buttonname" style="font-size: 32px; color: red; display: block;">ButtonClicked</p>
       <script> 
-        const modelViewer= document.querySelector(".ar-button"); 
-        const modelElement= document.querySelector("model-viewer#logo-skywell"); 
-        const buttonlViewer= document.querySelector("#buttonclick"); 
-        modelViewer.addEventListener('click', () => { 
-          buttonlViewer.style.color = "blue";
-          modelElement.setAttribute("src", "models/Hyundai_Basic_Khaki_black_v03.glb");
-        }, false);
+          const buttonlViewer= document.querySelector("#buttonclick"); 
+          const buttonlName= document.querySelector("#buttonname"); 
+        Array.from(document.querySelectorAll("*")).forEach(e => {e.addEventListener('click', () => { 
+          buttonlViewer.innerHTML = e.id;
+          buttonlName.innerHTML = e.className;
+        }, false);});
+        //const modelViewer= document.querySelector(".ar-button"); 
+        //const modelElement= document.querySelector("model-viewer#logo-skywell"); 
+       //// modelViewer.addEventListener('click', () => { 
+        //  buttonlViewer.style.color = "blue";
+        //}, false);
       </script>
 
 </body>
