@@ -22,7 +22,7 @@
     <script> 
       const error = document.querySelector("#logo-skywell");
       error.addEventListener('ar-status', (event) => {
-        document.querySelector("#text").innerHTML = event.detail.status;
+        document.querySelector("#text").innerHTML = document.querySelector("#text").innerHTM + " " + event.detail.status;
         if(event.detail.status == 'session-started')
         {
           error.setAttribute("src", "/models/Hyundai_Basic_Khaki_black_v03.glb");
