@@ -19,24 +19,12 @@
       </model-viewer>
     </div>
       <script> 
-        const modelViewerTransform = document.querySelector("model-viewer#logo-skywell"); 
-        const maxDeg = 15; 
-        document.addEventListener('mousemove', (event) => { 
-          let relativeCenterX = event.clientX - (window.innerWidth * 0.5); 
-          let relativeCenterY = event.clientY - (window.innerHeight * 0.5); 
-          modelViewerTransform.orientation = ` 0 ${maxDeg * relativeCenterY / window.innerHeight}deg ${maxDeg * relativeCenterX / window.innerWidth}deg`; 
+        const modelViewer= document.querySelector("model-viewer#default-ar-button"); 
+        const modelElement= document.querySelector("model-viewer#logo-skywell"); 
+        modelViewer.addEventListener('click', () => { 
+          modelElement.setAttribute("src", "models/Hyundai_Basic_Khaki_black_v03.glb");
         });
-        window.addEventListener("devicemotion", (event) => {
-          let k = maxDeg * 0.102;
-          modelViewerTransform.orientation = `0 ${k * -event.accelerationIncludingGravity.y}deg ${k * event.accelerationIncludingGravity.x}deg`; 
-        }, true);
       </script>
-      <style>
-        model-viewer::part(default-ar-button) {
-          width: 200px;
-          height: 200px;
-        }
-      </style>
 
 </body>
 </html>
