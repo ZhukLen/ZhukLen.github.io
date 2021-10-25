@@ -15,10 +15,10 @@
       <!--Model-Viewer-->
     <div style="width: 670px; height: 420px;">
       <model-viewer id="logo-skywell" src="models/logo_dance_5.glb" ar ar-modes="webxr scene-viewer quick-look" autoplay environment-image="neutral" style="width: 100%; height: 100%;" >
-        <model-viewer src="./models/Hyundai_Basic_Khaki_black_v03.glb" camera-controls autoplay environment-image="neutral" style="width: 100%; height: 100%;" ></model-viewer>
+        <!-- <model-viewer src="./models/Hyundai_Basic_Khaki_black_v03.glb" camera-controls autoplay environment-image="neutral" style="width: 100%; height: 100%;" ></model-viewer>  -->
       </model-viewer>
     </div>
-      <!--<script> 
+      <script> 
         const modelViewerTransform = document.querySelector("model-viewer#logo-skywell"); 
         const maxDeg = 15; 
         document.addEventListener('mousemove', (event) => { 
@@ -30,7 +30,13 @@
           let k = maxDeg * 0.102;
           modelViewerTransform.orientation = `0 ${k * -event.accelerationIncludingGravity.y}deg ${k * event.accelerationIncludingGravity.x}deg`; 
         }, true);
-      </script> -->
+      </script>
+      <style>
+        model-viewer::part(default-ar-button) {
+          width: 200px;
+          height: 200px;
+        }
+      </style>
 
 </body>
 </html>
