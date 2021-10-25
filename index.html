@@ -18,10 +18,13 @@
         <!-- <model-viewer src="./models/Hyundai_Basic_Khaki_black_v03.glb" camera-controls autoplay environment-image="neutral" style="width: 100%; height: 100%;" ></model-viewer>  -->
       </model-viewer>
     </div>
+    <p id="buttonclick" style="font-size: 32px; color: red; display: none;">ButtonClicked</p>
       <script> 
         const modelViewer= document.querySelector(".ar-button"); 
         const modelElement= document.querySelector("model-viewer#logo-skywell"); 
+        const buttonlViewer= document.querySelector("#buttonclick"); 
         modelViewer.addEventListener('click', () => { 
+          buttonlViewer.style.display = "block";
           modelElement.setAttribute("src", "models/Hyundai_Basic_Khaki_black_v03.glb");
         });
       </script>
