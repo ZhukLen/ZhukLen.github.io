@@ -23,11 +23,11 @@
       const error = document.querySelector("#logo-skywell");
       error.addEventListener('ar-status', (event) => {
         document.querySelector("#text").innerHTML = document.querySelector("#text").innerHTM + " " + event.detail.status;
-        if(event.detail.status == 'not-presenting')
-        {
-          error.setAttribute("src", "/models/logo_dance_5.glb");
-        }
-        else error.setAttribute("src", "/models/Hyundai_Basic_Khaki_black_v03.glb");
+        //if(event.detail.status == 'not-presenting')
+        //{
+        //  error.setAttribute("src", "/models/logo_dance_5.glb");
+        //}
+        error.setAttribute("src", "/models/Hyundai_Basic_Khaki_black_v03.glb");
       });
     </script>
 
