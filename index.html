@@ -14,25 +14,18 @@
 
       <!--Model-Viewer-->
     <div style="width: 670px; height: 420px;">
-      <model-viewer id="logo-skywell" src="models/logo_dance_5.glb" ar ar-modes="webxr scene-viewer quick-look" autoplay environment-image="neutral" style="width: 100%; height: 100%;" >
+      <model-viewer id="" src="models/logo_dance_5.glb" ar ar-modes="webxr scene-viewer quick-look" autoplay environment-image="neutral" style="width: 100%; height: 100%;" >
         <!-- <model-viewer src="./models/Hyundai_Basic_Khaki_black_v03.glb" camera-controls autoplay environment-image="neutral" style="width: 100%; height: 100%;" ></model-viewer>  -->
       </model-viewer>
     </div>
-    <p id="buttonclick" style="font-size: 32px; color: red; display: block;">ButtonClicked</p>
-    <p id="buttonname" style="font-size: 32px; color: red; display: block;">ButtonClicked</p>
-      <script> 
-          const buttonlViewer= document.querySelector("#buttonclick"); 
-          const buttonlName= document.querySelector("#buttonname"); 
-        Array.from(document.querySelectorAll("*")).forEach(e => {e.addEventListener('click', () => { 
-          buttonlViewer.innerHTML = e.id;
-          buttonlName.innerHTML = e.className;
-        }, false);});
-        //const modelViewer= document.querySelector(".ar-button"); 
-        //const modelElement= document.querySelector("model-viewer#logo-skywell"); 
-       //// modelViewer.addEventListener('click', () => { 
-        //  buttonlViewer.style.color = "blue";
-        //}, false);
-      </script>
+    <script> 
+      const error = document.querySelector("#logo-skywell");
+      error.addEventListener('ar-status', (event) => {
+        if(event.detail.status == 'session-started'){
+          error.setAttribute("src", "/models/Hyundai_Basic_Khaki_black_v03.glb");
+        }
+      });
+    </script>
 
 </body>
 </html>
