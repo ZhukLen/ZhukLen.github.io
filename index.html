@@ -10,41 +10,75 @@
     <!-- Loads <model-viewer> for browsers: -->
       <script type="module" src="./js/model-viewer.min.js"></script>
       <link type="text/css" href="./js/styles3d.css" rel="stylesheet"/>
-      <link rel="preload" as="image" href="5small.hdr">
+      <link rel="preload" as="image" href="sample-5s.webm">
 </head>
 <body style="background-color: slateblue;">
 
       <!--Model-Viewer-->
     <div style="width: 670px; height: 420px; background-color: slateblue;">
-      <model-viewer id="vr-skywell" src="occulus.glb" poster="occulus-poster.webp" autoplay environment-image="neutral" camera-controls max-field-of-view="30deg" camera-target="0m 0.76m -3.364m" camera-orbit="25deg 82deg auto" disable-zoom ar ar-modes="scene-viewer quick-look" skybox-image="5small.hdr"> 
+      <model-viewer alt="Visualisation" id="viz-skywell" src="./delongi__blue.glb" ar ar-modes="webxr scene-viewer quick-look" seamless-poster poster="poster-delongi.webp" max-field-of-view="35deg" camera-controls disable-zoom>  
 
-        <div class="progress-bar hide" slot="progress-bar"> 
-
-            <div class="update-bar"></div> 
-
-        </div> 
-
-    </model-viewer>
-
-    <script>  
-
-      const vr = document.querySelector("#vr-skywell"); 
-
-      vr.addEventListener('ar-status', (e) => { 
-
-        if (e.detail.status == 'not-presenting' || e.detail.status == 'failed') 
-        { 
-          vr.removeAttribute("skybox-image");
-          vr.setAttribute("src", "occulus.glb");
-
-        } else { 
-          vr.removeAttribute("src");
-          vr.setAttribute("skybox-image", "5small.hdr");
-        } 
-
-      }); 
-
-    </script>
+        <div class="progress-bar hide" slot="progress-bar">   
+  
+           <div class="update-bar"></div>   
+  
+        </div>   
+  
+          <div class="controls" style="position: absolute; display: flex; flex-direction: column; bottom: 50%; right: 0; transform: translateY(50%); width: 70px;" >  
+  
+          <div id="viz-blue" style="width: 70px; height: 70px;"> 
+  
+            <div style="width: 36px; height: 36px; top: 50%; bottom: 50%; transform: translate(50%, 50%); border-radius: 50%; background: linear-gradient(180deg, #248FF1 0%, #181EB1 100%);"></div>  
+  
+          </div> 
+  
+          <div id="viz-red" style="width: 70px; height: 70px;"> 
+  
+             <div style="width: 36px; height: 36px; top: 50%; bottom: 50%; transform: translate(50%, 50%); border-radius: 50%; background: linear-gradient(180deg, #F12424 0%, #B11818 100%);"></div> 
+  
+          </div> 
+  
+          <div id="viz-orange" style="width: 70px; height: 70px;"> 
+  
+             <div style="width: 36px; height: 36px; top: 50%; bottom: 50%; transform: translate(50%, 50%); border-radius: 50%; background: linear-gradient(180deg, #F5A509 0%, #F87700 100%);"></div> 
+  
+          </div> 
+  
+         </div>  
+  
+       </model-viewer>  
+  
+      <script>  
+  
+        const mVTexture = document.querySelector("model-viewer#viz-skywell");  
+  
+         mVTexture.addEventListener("load", () => {  
+  
+          const texture = mVTexture.model.materials[0].pbrMetallicRoughness['baseColorTexture'].texture;  
+  
+          const applyPBRTexture = (src) => texture.source.setURI(src); 
+  
+          document.querySelector('#viz-blue').addEventListener('click', () => {  
+  
+            applyPBRTexture("sample-5s.webm");  
+  
+          });  
+  
+          document.querySelector('#viz-red').addEventListener('click', () => {  
+  
+            applyPBRTexture("red_BaseColor.webp");  
+  
+          });  
+  
+          document.querySelector('#viz-orange').addEventListener('click', () => {  
+  
+            applyPBRTexture("orange2_BaseColor.webp");  
+  
+          });  
+  
+        })  
+  
+      </script> 
 
   <script src="./js/script.js"></script>
 
